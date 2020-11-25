@@ -39,7 +39,7 @@ def main():
 
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
   stdout = process.communicate()[0]
-  print('STDOUT:{}'.format(stdout))
+  print(f'STDOUT: {stdout}')
 
 
 if __name__ == "__main__":
