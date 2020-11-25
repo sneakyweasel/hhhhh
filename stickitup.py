@@ -2,7 +2,7 @@
 import hashpumpy
 import urllib.parse
 
-from functions import stick_register
+from functions import stick_register, stick_login
 
 def main():
     # admi / '4dd28ad0560441245de6fda3973890eeb41b702d' / variable key length
@@ -15,7 +15,10 @@ def main():
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("{} => {}".format(r[0], register_user))
 
-        stick_register(register_user, f'stick_register@pwn.com', register_user)
+        register_email = f'stick_register@pwn.com'
+        stick_register(register_user, register_email, register_user)
+
+        stick_login(register_email, register_user)
         
 
 if __name__ == "__main__":
