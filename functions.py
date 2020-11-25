@@ -2,6 +2,7 @@ import logging
 import psutil
 import pycurl
 import re
+from io import BytesIO
 
 URL_REGISTER = 'http://stickitup.chall.malicecyber.com/register.php'
 URL_LOGIN = 'http://stickitup.chall.malicecyber.com/login.php'
@@ -55,24 +56,29 @@ def _write_header2(header):
 def stick_register(username, email, password):
     try:
         c = pycurl.Curl() 
-        url = URL_REGISTER + f"?alias={username}&email={email}&password={password}"
+        url = URL_REGISTER
         print(url)
         c.setopt(pycurl.URL, url)
         c.setopt(pycurl.FOLLOWLOCATION, 1)
         c.setopt(pycurl.HEADERFUNCTION, _write_header1)
-        #c.setopt(pycurl.POST, 1)
-        #c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
-        #c.setopt(pycurl.POSTFIELDS, f"alias={username}&email={email}&password={password}")
+        c.setopt(pycurl.POST, 1)
+        c#.setopt(pycurl.WRITEFUNCTION, lambda x: None)
+        c.setopt(pycurl.POSTFIELDS, f"alias={username}&email={email}&password={password}")
+        b = BytesIO()
+        c.setopt(pycurl.WRITEDATA, b)
         c.setopt(pycurl.HTTPHEADER, [
-            'Accept-Language: fr-fr', 
             'Upgrade-Insecure-Requests: 1', 
-            'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', 
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36', 
             'Content-Type: application/x-www-form-urlencoded',
-            'X-Requested-With: XMLHttpRequest',
-            'Cookie: PHPSESSID=1lpibtq7ul54dalt90kak2lim7'
+            'Cookie: PHPSESSID=1lpibtq7ul54dalt90kak2lim7',
+            'Cache-Control: max-age=0',
+            'Origin: http://stickitup.chall.malicecyber.com',
+            'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'Referer: http://stickitup.chall.malicecyber.com/',
+            'Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7'
         ])
         c.perform() 
-        return c.getinfo(pycurl.HTTP_CODE)
+        return c.getinfo(pycurl.HTTP_CODE), b
     finally:
         c.close()
 
@@ -87,6 +93,8 @@ def stick_login(email, password):
         c.setopt(pycurl.HEADERFUNCTION, _write_header2)
         #c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
         c.setopt(pycurl.POSTFIELDS, f"email={email}&password={password}")
+        b = BytesIO()
+        c.setopt(pycurl.WRITEDATA, b)
         c.setopt(pycurl.HTTPHEADER, [
             'Accept-Language: fr-fr', 
             'Upgrade-Insecure-Requests: 1', 
@@ -96,6 +104,6 @@ def stick_login(email, password):
             #'Set-Cookie: ' + SESSION
         ])
         c.perform()
-        return c.getinfo(pycurl.HTTP_CODE)
+        return c.getinfo(pycurl.HTTP_CODE), b
     finally:
         c.close()
