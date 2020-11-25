@@ -26,16 +26,30 @@ def generate_random_emails(nb, length):
 def main():
     # admi / '4dd28ad0560441245de6fda3973890eeb41b702d' / variable key length
     results = []
-    for i in range(1, 54):
-        data = list(hashpumpy.hashpump('4dd28ad0560441245de6fda3973890eeb41b702d', "admi", 'n', i))
+
+    username = "admin"
+    hashes = [
+        'f84807ab39ce9a91362fd07dc92ebfe9f93550e9', # a
+        '61fc13a44575a868bc1a33ea3ddbdc6c70815f8e', # ad
+        'cf0b865de23ec929ac6112edf0eb90d3c5a32107', # adm
+        '4dd28ad0560441245de6fda3973890eeb41b702d', # admi
+    ]
+    for i in range(1, 4):
+        data = list(hashpumpy.hashpump(hashes[i-1], username[:i], username[i:], KEY_LEN))
         data.append(i)
+        data.append(username[:i])
+        data.append(username[i:])
         results.append(data)
+
+    print(results)
 
     for r in results:
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("[{}] {} => {}".format(r[2], r[0], register_user))
         print(register_user)
-        status, data = stick_member(register_user, '5b18c8fd186116e2c474fd89e68b3f46f402e563', prefix='admi')
+
+        status, data = stick_member(register_user, r[0], prefix=r[3])
+        
 
         print("[{}] Code: {}".format(r[2], status))
         if status == 200:
