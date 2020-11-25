@@ -55,20 +55,21 @@ def _write_header2(header):
 def stick_register(username, email, password):
     try:
         c = pycurl.Curl() 
-        url = URL_REGISTER
+        url = URL_REGISTER + f"?alias={username}&email={email}&password={password}"
         print(url)
         c.setopt(pycurl.URL, url)
-        #c.setopt(pycurl.POST, 1)
         c.setopt(pycurl.FOLLOWLOCATION, 1)
         c.setopt(pycurl.HEADERFUNCTION, _write_header1)
-        c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
-        c.setopt(pycurl.POSTFIELDS, f"alias={username}&email={email}&password={password}")
+        #c.setopt(pycurl.POST, 1)
+        #c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
+        #c.setopt(pycurl.POSTFIELDS, f"alias={username}&email={email}&password={password}")
         c.setopt(pycurl.HTTPHEADER, [
             'Accept-Language: fr-fr', 
             'Upgrade-Insecure-Requests: 1', 
             'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', 
             'Content-Type: application/x-www-form-urlencoded',
-            'X-Requested-With: XMLHttpRequest'
+            'X-Requested-With: XMLHttpRequest',
+            'Cookie: PHPSESSID=1lpibtq7ul54dalt90kak2lim7'
         ])
         c.perform() 
         return c.getinfo(pycurl.HTTP_CODE)

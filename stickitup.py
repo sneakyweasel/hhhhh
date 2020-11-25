@@ -16,12 +16,14 @@ def main():
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("{} => {}".format(r[0], register_user))
 
-        register_email = f'{register_user}%40pwn.com'
-        status = stick_register(register_user, register_email, register_user)
+        register_email = f'hello%40pwn.com'
+        register_pwd   = "tototo"
+        status = stick_register(register_user, register_email, register_pwd)
         print("Code: {}".format(status))
 
         status = stick_login(register_email, register_user)
         print("Code: {}".format(status))
+        break
 
 if __name__ == "__main__":
     main()
