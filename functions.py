@@ -18,6 +18,7 @@ def timeout_command_ex(command, timeout, tmp=None, env={}, shell=False, universa
 
     if cast is True:
         command = [str(i) for i in command]
+        print(' '.join(command))
     try:
         if tmp is None:
             cc = subprocess.run(command, timeout=timeout, check=True, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, env=dict(os.environ, **env), universal_newlines=universal_newlines, close_fds=True)
