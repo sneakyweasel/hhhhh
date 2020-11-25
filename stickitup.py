@@ -3,8 +3,12 @@ from os import stat
 import hashpumpy
 import urllib.parse
 import string
+import chardet
 
 from functions import stick_register, stick_login, stick_member
+
+# PROVEN KEY LENGTH IS 16 (128 bits)
+KEY_LEN = 16
 
 import random
 domains = [ "hotmail.com", "gmail.com", "aol.com", "mail.com" , "mail.kz", "yahoo.com"]
@@ -38,7 +42,7 @@ def main():
             resp = ''
             try:
                 resp = data.getvalue()
-                resp = resp.decode()
+                resp = resp.decode('latin-1')
                 if resp.find('Missing') > 0:
                     print("[{}] KO: Missing fields".format(r[2]))
                     break 
@@ -50,6 +54,9 @@ def main():
                     break
                 elif resp.find('Registered !') > 0:
                     print("[{}] OK: Registered".format(r[2]))
+                elif resp.find('Welcome') > 0:
+                    print("[{}] OK: Logged as Admin".format(r[2]))
+                    break
                 elif resp.find('email or password empty'):
                     print("[{}] KO: Hash doesn't work".format(r[2]))
                 else:
