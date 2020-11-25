@@ -3,6 +3,7 @@ import pycurl
 import psutil
 import re
 import os
+import subprocess
 import sys
 from urllib.parse import urlencode
 
@@ -27,16 +28,19 @@ def main():
     os.path.join(BINPATH, 'hash_extender'),
     '--data', f'{data}',
     '--secret-min', "6",
+    '--secret-max', "10",
     '--append', f'{padding}',
     '--signature',  f'{signature}',
     '--format', 'sha1',
     '--out-data-format=hex',
     '--out-signature-format=hex',
-    '--quiet'
+    # '--quiet'
   ]
-  print(cmd)
-  _, ret, data = timeout_command_ex(cmd, 10)
-  print("ret: {}, data: {}".format(ret, data))
+
+  process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+  stdout = process.communicate()[0]
+  print('STDOUT:{}'.format(stdout))
+
 
 if __name__ == "__main__":
-    main()
+  main()
