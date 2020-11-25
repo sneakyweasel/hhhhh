@@ -1,4 +1,5 @@
 # hello
+from os import stat
 import hashpumpy
 import urllib.parse
 
@@ -16,10 +17,11 @@ def main():
         print("{} => {}".format(r[0], register_user))
 
         register_email = f'stick_register@pwn.com'
-        stick_register(register_user, register_email, register_user)
+        status = stick_register(register_user, register_email, register_user)
+        print("Code: {}".format(status))
 
-        stick_login(register_email, register_user)
-        
+        status = stick_login(register_email, register_user)
+        print("Code: {}".format(status))
 
 if __name__ == "__main__":
     main()

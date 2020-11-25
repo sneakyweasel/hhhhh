@@ -77,6 +77,7 @@ def stick_login(email, password):
         c.setopt(pycurl.URL, URL_LOGIN + f"?email={email}&password={password}")
         c.setopt(pycurl.FOLLOWLOCATION, 1 )
         c.setopt(pycurl.HEADERFUNCTION, _write_header2)
+        c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
         c.setopt(pycurl.HTTPHEADER, [
             'Accept-Language: fr-fr', 
             'Upgrade-Insecure-Requests: 1', 
