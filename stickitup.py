@@ -2,6 +2,7 @@ import pycurl
 import re
 import os
 from urllib.parse import urlencode
+from functions import timeout_command_ex
 
 URL_REGISTER = 'http://stickitup.chall.malicecyber.com/register.php'
 URL_LOGIN = 'http://stickitup.chall.malicecyber.com/login.php'
@@ -77,35 +78,5 @@ cmd = [
 ]
 
 print(cmd)
-
-def timeout_command_ex(command, timeout, tmp=None, env={}, shell=False, universal_newlines=False, cast=True):
-    """ Call shell-command and either return its output or kill it
-    if it doesn't normally exit within <timeout> seconds
-
-    :param command: command to be executed
-    :type command: array
-    :param timeout: watchdog timeout in seconds
-    :type timeout: int
-    :param tmp: temporary path
-    :type tmp: str
-    :return: None if process is aborted, subprocess, returncode and stdout otherwise
-    """
-    import subprocess, datetime, os
-    cc = None
-
-    if cast is True:
-        command = [str(i) for i in command]
-    try:
-        if tmp is None:
-            cc = subprocess.run(command, timeout=timeout, check=True, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, env=dict(os.environ, **env), universal_newlines=universal_newlines, close_fds=True)
-        else:
-            cc = subprocess.run(command, timeout=timeout, check=True, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, cwd=str(tmp), env=dict(os.environ, **env), universal_newlines=universal_newlines, close_fds=True)
-    except subprocess.TimeoutExpired:
-        process.kill()
-        if job_id is None:
-            logging.error("Command '%s' has timeout after %s seconds", command, timeout)
-        else:
-            logging.error("#%s Command '%s' has timeout after %s seconds", job_id, command, timeout)
-        return None, None, None
-
-    return cc, cc.returncode, cc.stdout
+_, ret, data = timeout_command_ex(cmd, 10)
+print("ret: {}, data: {}".format(ret, data))
