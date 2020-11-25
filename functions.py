@@ -119,6 +119,7 @@ def stick_member(append, signature, prefix='admi'):
         url = URL_MEMBER
         print(url)
         c.setopt(pycurl.URL, URL_LOGIN)
+        c.setopt(pycurl.FOLLOWLOCATION, 1 )
         #c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
         b = BytesIO()
         c.setopt(pycurl.WRITEDATA, b)
