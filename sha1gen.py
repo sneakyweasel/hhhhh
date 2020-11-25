@@ -17,7 +17,7 @@ def sha1gen(user):
   return pbHash
 
 def main():
-  BINPATH = './bin/linux/'
+  BINPATH = './bin/macos/'
   data = "123456"
   padding = "111"
   user = "aaa"
@@ -27,16 +27,18 @@ def main():
     os.path.join(BINPATH, 'hash_extender'),
     '--data', f'{data}',
     '--secret-min', "6",
+    '--secret-max', '10',
     '--append', f'{padding}',
     '--signature',  f'{signature}',
     '--format', 'sha1',
     '--out-data-format=hex',
     '--out-signature-format=hex',
-    '--quiet'
+    #'--quiet'
   ]
-  print(cmd)
   _, ret, data = timeout_command_ex(cmd, 10)
-  print("ret: {}, data: {}".format(ret, data))
+  print("HashExtender Status: {}".format(ret))
+  for line in data.decode().strip().splitlines():
+    print(line)
 
 if __name__ == "__main__":
     main()

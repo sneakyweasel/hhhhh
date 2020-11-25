@@ -98,7 +98,9 @@ def main():
     ]
 
     _, ret, data = timeout_command_ex(cmd, 10)
-    print("ret: {}, data: {}".format(ret, data))
+    print("HashExtender Status: {}".format(ret))
+    for line in data.decode().strip().splitlines():
+        print(line)
 
 if __name__ == "__main__":
     main()
