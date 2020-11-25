@@ -2,6 +2,8 @@
 import hashpumpy
 import urllib.parse
 
+from functions import stick_register
+
 def main():
     # admi / '4dd28ad0560441245de6fda3973890eeb41b702d' / variable key length
     results = []
@@ -10,7 +12,11 @@ def main():
         results.append(data)
 
     for r in results:
-        print("{} => {}".format(r[0], urllib.parse.quote_from_bytes(r[1])))
+        register_user = urllib.parse.quote_from_bytes(r[1])
+        print("{} => {}".format(r[0], register_user))
+
+        stick_register(register_user, f'stick_register@pwn.com', register_user)
+        
 
 if __name__ == "__main__":
     main()
