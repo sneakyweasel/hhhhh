@@ -110,10 +110,10 @@ def stick_login(email, password):
     finally:
         c.close()
 
-def stick_member(append, signature, prefix='admi'):
+def stick_member(prepend, signature, prefix='admi'):
 
-    auth=prefix + append + '%3A' + signature
-
+    auth=prepend + '%3A' + signature
+    print(auth)
     try:
         c = pycurl.Curl() 
         url = URL_MEMBER
