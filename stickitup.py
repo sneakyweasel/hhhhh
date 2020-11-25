@@ -73,8 +73,22 @@ status = c.getinfo(pycurl.HTTP_CODE)
 print("Login Status: {}".format(status)) 
 c.close()
 
+SECRET_MIN = '6'
+
+data = USERNAME
+padding = "padding"
+signature = "" # get from pycurl cookie on login
+
 cmd = [
-    os.path.join(BINPATH, 'hash_extender')
+    os.path.join(BINPATH, 'hash_extender'),
+    '--data', f'{data}',
+    '--secret-min', SECRET_MIN,
+    '--append', f'{padding}',
+    '--signature',  f'{signature}',
+    '--format', 'sha1',
+    '--out-data-format=hex',
+    '--out-signature-format=hex',
+    '--quiet'
 ]
 
 print(cmd)
