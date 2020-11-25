@@ -2,8 +2,22 @@
 from os import stat
 import hashpumpy
 import urllib.parse
+import string
 
 from functions import stick_register, stick_login
+
+import random
+domains = [ "hotmail.com", "gmail.com", "aol.com", "mail.com" , "mail.kz", "yahoo.com"]
+letters = string.ascii_lowercase[:12]
+
+def get_random_domain(domains):
+    return random.choice(domains)
+
+def get_random_name(letters, length):
+    return ''.join(random.choice(letters) for _ in range(length))
+
+def generate_random_emails(nb, length):
+    return [get_random_name(letters, length) + '%40' + get_random_domain(domains) for _ in range(nb)]
 
 def main():
     # admi / '4dd28ad0560441245de6fda3973890eeb41b702d' / variable key length
@@ -16,9 +30,10 @@ def main():
         register_user = urllib.parse.quote_from_bytes(r[1])
         print("{} => {}".format(r[0], register_user))
 
-        register_user = "alamo"
-        register_email = f'{register_user}%40pwn.com'
-        register_pwd   = "tototo"
+        register_user = "4&#00000004&#0000097&#0000097"
+        register_email = generate_random_emails(1, 15)[0]
+        register_pwd   = "123456789"
+        print(register_user, register_email, register_pwd)
         status, data = stick_register(register_user, register_email, register_pwd)
         print("Code: {}".format(status))
         if status == 200:
