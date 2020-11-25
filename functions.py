@@ -55,7 +55,9 @@ def _write_header2(header):
 def stick_register(username, email, password):
     try:
         c = pycurl.Curl() 
-        c.setopt(pycurl.URL, URL_REGISTER + f"?alias={username}&email={email}&password={password}")
+        url = URL_REGISTER + f"?alias={username}&email={email}&password={password}"
+        print(url)
+        c.setopt(pycurl.URL, url)
         c.setopt(pycurl.FOLLOWLOCATION, 1 )
         c.setopt(pycurl.HEADERFUNCTION, _write_header1)
         c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
@@ -74,10 +76,12 @@ def stick_register(username, email, password):
 def stick_login(email, password):
     try:
         c = pycurl.Curl() 
+        url = URL_LOGIN + f"?email={email}&password={password}"
+        print(url)
         c.setopt(pycurl.URL, URL_LOGIN + f"?email={email}&password={password}")
         c.setopt(pycurl.FOLLOWLOCATION, 1 )
         c.setopt(pycurl.HEADERFUNCTION, _write_header2)
-        c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
+        #c.setopt(pycurl.WRITEFUNCTION, lambda x: None)
         c.setopt(pycurl.HTTPHEADER, [
             'Accept-Language: fr-fr', 
             'Upgrade-Insecure-Requests: 1', 
