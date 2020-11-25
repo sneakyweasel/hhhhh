@@ -56,6 +56,7 @@ def main():
                     print("[{}] OK: Registered".format(r[2]))
                 elif resp.find('Welcome') > 0:
                     print("[{}] OK: Logged as Admin".format(r[2]))
+                    print(resp)
                     break
                 elif resp.find('email or password empty'):
                     print("[{}] KO: Hash doesn't work".format(r[2]))
@@ -64,7 +65,6 @@ def main():
             except Exception as exc:
                 print("[{}] KO: body length {} => {}".format(r[2], len(resp), exc))
                 print(resp.decode('latin-1'))
-                pass
 
 if __name__ == "__main__":
     main()
